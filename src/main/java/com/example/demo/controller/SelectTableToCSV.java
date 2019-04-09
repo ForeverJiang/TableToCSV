@@ -24,7 +24,7 @@ public class SelectTableToCSV {
 
     @RequestMapping(value = "read")
     public void toRead() {
-        CSVUtil.read("test");
+        csvUtil.read("test");
     }
 
     @RequestMapping(value = "write")
