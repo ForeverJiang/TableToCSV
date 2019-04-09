@@ -32,7 +32,7 @@ public class TableToCSVController {
     }
 
     @RequestMapping(value = "write")
-    public void toWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void toWrite() {
         List<User> userList = new ArrayList<>();
         User user = new User();
         user.setId("12365");
@@ -40,7 +40,6 @@ public class TableToCSVController {
         user.setName("张山");
         userList.add(user);
         fileUtil.write("test", userList);
-        fileUtil.downloadFile(request, response, "test");
     }
 
 }

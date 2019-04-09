@@ -36,14 +36,6 @@ public class FileDownloadController {
     @RequestMapping("/download")
     public void download(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        List<User> userList = new ArrayList<>();
-        User user = new User();
-        user.setId("12365");
-        user.setAge("34");
-        user.setName("张山");
-        userList.add(user);
-//        fileUtil.write("test", userList);
         fileUtil.downloadFile(request, response, "test");
     }
 }

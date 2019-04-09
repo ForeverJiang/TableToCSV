@@ -117,8 +117,6 @@ public class FileUtil {
 
             //压缩
             zipUtil(name, filePath);
-            //下载
-//            downloadFile(request, response, name, localPath);
 
         } catch (IOException e) {
             e.printStackTrace();
