@@ -66,7 +66,7 @@ public class CSVUtil {
         }
     }
 
-//    @Async
+    @Async
     public void write(String name, List<? extends Object> objectList) {
 //        executorService.submit(() -> {
             try {
