@@ -12,13 +12,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -26,13 +32,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Description: 将选择的表导出为CSV文件
+ * Description: 将选择的表导出为CSV文件并压缩
  * Creator: jiangyongheng
  * Date: 2019/04/08
  * Time: 10:03
  */
 @Component
-public class CSVUtil {
+public class FileUtil {
 
 //    @Autowired
 //    @Qualifier("singleThreaded")
@@ -80,7 +86,8 @@ public class CSVUtil {
     public void write(String name, List<? extends Object> objectList) {
 //        executorService.submit(() -> {
         try {
-            String filePath = "/Users/jiangyongheng/Desktop/" + name + ".csv";
+            String localPath = "/Users/jiangyongheng/Desktop/";
+            String filePath = localPath + name + ".csv";
             // 创建CSV写对象
             CsvWriter csvWriter = new CsvWriter(filePath, ',', Charset.forName("GBK"));
             //CsvWriter csvWriter = new CsvWriter(filePath);
@@ -110,6 +117,8 @@ public class CSVUtil {
 
             //压缩
             zipUtil(name, filePath);
+            //下载
+//            downloadFile(request, response, name, localPath);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,7 +128,13 @@ public class CSVUtil {
 //        });
     }
 
-
+    /**
+     * 压缩
+     *
+     * @param name
+     * @param filePath
+     * @throws IOException
+     */
     public void zipUtil(String name, String filePath) throws IOException {
         //这个是文件夹的绝对路径，如果想要相对路径就自行了解写法
         File fileToZip = new File(filePath);
@@ -170,4 +185,66 @@ public class CSVUtil {
         fis.close();
     }
 
+
+    /**
+     * 文件下载
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public void downloadFile(HttpServletRequest request,
+                             HttpServletResponse response, String name) throws UnsupportedEncodingException {
+
+        String fileName = name + ".zip"; //下载的文件名
+
+        // 如果文件名不为空，则进行下载
+        if (fileName != null) {
+            //设置文件路径
+            String realPath = "/Users/jiangyongheng/Desktop/";
+            File file = new File(realPath, fileName);
+            // 如果文件名存在，则进行下载
+            if (file.exists()) {
+                // 配置文件下载
+                response.setHeader("content-type", "application/octet-stream");
+                response.setContentType("application/octet-stream");
+                // 下载文件能正常显示中文
+                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+
+                // 实现文件下载
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = null;
+                BufferedInputStream bis = null;
+                try {
+                    fis = new FileInputStream(file);
+                    bis = new BufferedInputStream(fis);
+                    OutputStream os = response.getOutputStream();
+                    int i = bis.read(buffer);
+                    while (i != -1) {
+                        os.write(buffer, 0, i);
+                        i = bis.read(buffer);
+                    }
+                    System.out.println("Download the song successfully!");
+                } catch (Exception e) {
+                    System.out.println("Download the song failed!");
+                } finally {
+                    if (bis != null) {
+                        try {
+                            bis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (fis != null) {
+                        try {
+                            fis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

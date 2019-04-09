@@ -1,11 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.toCSV.CSVUtil;
+import com.example.demo.toCSV.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,25 +21,26 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/")
-public class SelectTableToCSV {
+public class TableToCSVController {
 
     @Autowired
-    private CSVUtil csvUtil;
+    private FileUtil fileUtil;
 
     @RequestMapping(value = "read")
     public void toRead() {
-        csvUtil.read("test");
+        fileUtil.read("test");
     }
 
     @RequestMapping(value = "write")
-    public void toWrite() {
+    public void toWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<User> userList = new ArrayList<>();
         User user = new User();
         user.setId("12365");
         user.setAge("34");
         user.setName("张山");
         userList.add(user);
-        csvUtil.write("test", userList);
+        fileUtil.write("test", userList);
+        fileUtil.downloadFile(request, response, "test");
     }
 
 }
