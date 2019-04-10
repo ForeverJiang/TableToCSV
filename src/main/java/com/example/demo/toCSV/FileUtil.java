@@ -45,39 +45,6 @@ public class FileUtil {
 //    @Qualifier("singleThreaded")
 //    private static ExecutorService executorService;
 
-    @Async
-    public void read(String name) {
-
-        String filePath = "/Users/jiangyongheng/Desktop/" + name + ".csv";
-
-
-        try {
-            // 创建CSV读对象
-            CsvReader csvReader = new CsvReader(filePath, ',', Charset.forName("UTF-8"));
-
-            // 读表头  跳过表头   如果需要表头的话，不要写这句
-//            csvReader.readHeaders();
-//            String[] head = csvReader.getHeaders(); //获取表头
-            while (csvReader.readRecord()) {
-                // 读一整行
-                System.out.println(csvReader.getRawRecord());
-//                // 读这行的某一列
-//                System.out.println(csvReader.get("Link"));
-//                for (int i = 0; i < head.length; i++)
-//                {
-//                    System.out.println(head[i] + ":" + csvReader.get(head[i]));
-//                }
-//                for (String h : head) {
-//                    System.out.println(h + ":" + csvReader.get(h));
-//                }
-            }
-            csvReader.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 异步方式实现csv文件
      *
@@ -89,7 +56,10 @@ public class FileUtil {
 //        executorService.submit(() -> {
         try {
 //            String localPath = "/Users/jiangyongheng/Desktop/";
-            String localPath = "src/main/resources/file/";
+            String localPath = "src/main/resources/file/" + name + "/";
+            //创建目录
+            createDir(localPath);
+
             String filePath = localPath + name + ".csv";
             // 创建CSV写对象
             CsvWriter csvWriter = new CsvWriter(filePath, ',', Charset.forName("GBK"));
@@ -143,7 +113,7 @@ public class FileUtil {
 //        FileOutputStream fos = new FileOutputStream(
 //                "/Users/jiangyongheng/Desktop/" + name + ".zip");
         FileOutputStream fos = new FileOutputStream(
-                "src/main/resources/file/" + name + ".zip");
+                "src/main/resources/file/" + name + "/" + name + ".zip");
         ZipOutputStream zipOut = new ZipOutputStream(fos);
         zipFile(fileToZip, fileToZip.getName(), zipOut);
         zipOut.close();
@@ -206,7 +176,7 @@ public class FileUtil {
         if (fileName != null) {
             //设置文件路径
 //            String realPath = "/Users/jiangyongheng/Desktop/";
-            String realPath = "src/main/resources/file/";
+            String realPath = "src/main/resources/file/" + name + "/";
             File file = new File(realPath, fileName);
             // 如果文件名存在，则进行下载
             if (file.exists()) {
@@ -249,6 +219,31 @@ public class FileUtil {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * 创建目录
+     *
+     * @param destDirName
+     * @return
+     */
+    public static boolean createDir(String destDirName) {
+        File dir = new File(destDirName);
+        if (dir.exists()) {
+            System.out.println("创建目录" + destDirName + "失败，目标目录已经存在");
+            return false;
+        }
+        if (!destDirName.endsWith(File.separator)) {
+            destDirName = destDirName + File.separator;
+        }
+        //创建目录
+        if (dir.mkdirs()) {
+            System.out.println("创建目录" + destDirName + "成功！");
+            return true;
+        } else {
+            System.out.println("创建目录" + destDirName + "失败！");
+            return false;
         }
     }
 }
