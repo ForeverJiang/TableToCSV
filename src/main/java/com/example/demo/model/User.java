@@ -10,6 +10,16 @@ import lombok.Data;
  */
 @Data
 public class User {
+    public User(String id, String name, String age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public User() {
+
+    }
+
     private String id;
     private String name;
     private String age;

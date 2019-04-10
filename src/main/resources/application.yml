@@ -7,3 +7,8 @@ spring:
     password: root
     url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
+#    thymeleaf:
+#      prefix: classpath:/static/
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+

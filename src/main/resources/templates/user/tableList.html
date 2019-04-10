@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Insert title here</title>
+</head>
+<body>
+<h2>列表</h2>
+<div>
+    <ui>
+        <li th:each="table:${tables}">
+            <div>
+                <span th:text="${table}"></span>
+                <button type="submit" name="提交">下载</button>
+            </div>
+        </li>
+    </ui>
+</div>
+</body>
+</html>
