@@ -3,6 +3,7 @@ package com.example.demo.toCSV;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 import com.example.demo.model.User;
+import org.apache.catalina.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +50,7 @@ public class FileUtil {
 
         String filePath = "/Users/jiangyongheng/Desktop/" + name + ".csv";
 
+
         try {
             // 创建CSV读对象
             CsvReader csvReader = new CsvReader(filePath, ',', Charset.forName("UTF-8"));
@@ -86,7 +88,8 @@ public class FileUtil {
     public void write(String name, List<? extends Object> objectList) {
 //        executorService.submit(() -> {
         try {
-            String localPath = "/Users/jiangyongheng/Desktop/";
+//            String localPath = "/Users/jiangyongheng/Desktop/";
+            String localPath = "src/main/resources/file/";
             String filePath = localPath + name + ".csv";
             // 创建CSV写对象
             CsvWriter csvWriter = new CsvWriter(filePath, ',', Charset.forName("GBK"));
@@ -137,8 +140,10 @@ public class FileUtil {
         //这个是文件夹的绝对路径，如果想要相对路径就自行了解写法
         File fileToZip = new File(filePath);
         //这个是压缩之后的文件绝对路径
+//        FileOutputStream fos = new FileOutputStream(
+//                "/Users/jiangyongheng/Desktop/" + name + ".zip");
         FileOutputStream fos = new FileOutputStream(
-                "/Users/jiangyongheng/Desktop/" + name + ".zip");
+                "src/main/resources/file/" + name + ".zip");
         ZipOutputStream zipOut = new ZipOutputStream(fos);
         zipFile(fileToZip, fileToZip.getName(), zipOut);
         zipOut.close();
@@ -200,7 +205,8 @@ public class FileUtil {
         // 如果文件名不为空，则进行下载
         if (fileName != null) {
             //设置文件路径
-            String realPath = "/Users/jiangyongheng/Desktop/";
+//            String realPath = "/Users/jiangyongheng/Desktop/";
+            String realPath = "src/main/resources/file/";
             File file = new File(realPath, fileName);
             // 如果文件名存在，则进行下载
             if (file.exists()) {
@@ -223,9 +229,9 @@ public class FileUtil {
                         os.write(buffer, 0, i);
                         i = bis.read(buffer);
                     }
-                    System.out.println("Download the song successfully!");
+                    System.out.println("Download the file successfully!");
                 } catch (Exception e) {
-                    System.out.println("Download the song failed!");
+                    System.out.println("Download the file failed!");
                 } finally {
                     if (bis != null) {
                         try {
