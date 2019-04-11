@@ -4,4 +4,8 @@
     <select id="queryListName" resultType="java.lang.String">
         select table_name from information_schema.tables where table_schema='test'
     </select>
+
+    <select id="queryAllUser" resultType="com.example.demo.model.User">
+        select id as id,username as name,age as age from t_user
+    </select>
 </mapper>

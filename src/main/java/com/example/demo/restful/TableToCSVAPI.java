@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/")
-public class TableToCSVController {
+public class TableToCSVAPI {
     @Autowired
     private UserService userService;
 
@@ -41,12 +41,13 @@ public class TableToCSVController {
     //将表中的数据写入csv
     @GetMapping(value = "write")
     public ModelAndView toWrite() {
-        List<User> userList = new ArrayList<>();
-        User user = new User();
-        user.setId("12365");
-        user.setAge("34");
-        user.setName("张山");
-        userList.add(user);
+//        List<User> userList = new ArrayList<>();
+//        User user = new User();
+//        user.setId(12365);
+//        user.setAge(34);
+//        user.setName("张山");
+//        userList.add(user);
+        List<User> userList = fileDownloadMapper.queryAllUser();
         fileUtil.write("test", userList);
         List<String> tables = fileDownloadMapper.queryListName();
         return new ModelAndView("user/tableList", "tables", tables);
@@ -65,25 +66,29 @@ public class TableToCSVController {
     }
 
 
-    //获取用户列表
-    @GetMapping("/list")
-    public ModelAndView listUser(Model model) {
-        List<User> userList = new ArrayList<User>();
-        for (int i = 0; i < 10; i++) {
-            userList.add(new User(i + "", "张三" + i, 20 + i + ""));
-        }
-
-//        model.addAttribute("users", userList);
-
-        return new ModelAndView("user/list", "users", userList);
-    }
-
-
     //实现Spring Boot 的文件下载功能，映射网址为/download
-    @RequestMapping("/download")
+    @GetMapping("/download")
     public void download(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         fileUtil.downloadFile(request, response, "test");
+//        List<String> tables = fileDownloadMapper.queryListName();
+//        return new ModelAndView("user/tableList", "tables", tables);
+    }
+
+
+    //获取用户列表
+    @GetMapping("/list")
+    public ModelAndView listUser(Model model) {
+//        List<User> userList = new ArrayList<User>();
+//        for (int i = 0; i < 10; i++) {
+//            userList.add(new User(i, "张三" + i, 20 + i));
+//        }
+
+//        model.addAttribute("users", userList);
+
+        List<User> userList = fileDownloadMapper.queryAllUser();
+
+        return new ModelAndView("user/list", "users", userList);
     }
 
 

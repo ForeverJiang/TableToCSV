@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class User {
-    public User(String id, String name, String age) {
+    public User(int id, String name, int age) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -20,7 +20,7 @@ public class User {
 
     }
 
-    private String id;
+    private int id;
     private String name;
-    private String age;
+    private int age;
 }

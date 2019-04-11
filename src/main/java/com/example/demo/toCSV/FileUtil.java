@@ -82,7 +82,7 @@ public class FileUtil {
                     if (!fields[j].isAccessible()) {
                         fields[j].setAccessible(true);
                     }
-                    content[j] = (String) fields[j].get(oi);
+                    content[j] = fields[j].get(oi).toString();
                 }
                 csvWriter.writeRecord(content);
             }
