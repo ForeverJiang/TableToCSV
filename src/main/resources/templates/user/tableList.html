@@ -11,6 +11,7 @@
         <li th:each="table:${tables}">
             <div>
                 <span th:text="${table}"></span>
+                <a href="http://localhost:8080/api/write" onclick="false">生成csv</a>
                 <button type="submit" name="提交">下载</button>
             </div>
         </li>
